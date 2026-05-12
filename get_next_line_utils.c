@@ -6,7 +6,7 @@
 /*   By: ecakiray <ecakiray@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/09 10:47:08 by ecakiray          #+#    #+#             */
-/*   Updated: 2026/05/09 15:14:42 by ecakiray         ###   ########.fr       */
+/*   Updated: 2026/05/12 22:03:26 by ecakiray         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-static size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
 	size_t	src_len;
 	size_t	i;
@@ -45,13 +45,13 @@ static size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	return (src_len);
 }
 
-static void	ft_bzero(void *s, size_t n)
+void	ft_bzero(void *s, size_t n)
 {
 	while (n-- > 0)
 		*(char *)s++ = '\0';
 }
 
-static void	*ft_calloc(size_t nmemb, size_t size)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
 	char	*mem_copied;
 	size_t	total_size;
@@ -66,12 +66,12 @@ static void	*ft_calloc(size_t nmemb, size_t size)
 	return (mem_copied);
 }
 
-int	ft_strchrl(const char *s, int start, int c)
+size_t	ft_strchrloc(const char *s, int c, int buffersize)
 {
 	int	len;
 
 	len = 0;
-	while (*(s + start) != '\0')
+	while (len < buffersize)
 	{
 		len++;
 		if (*(unsigned char *)s == (unsigned char)c)
