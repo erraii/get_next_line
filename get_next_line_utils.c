@@ -6,7 +6,7 @@
 /*   By: ecakiray <ecakiray@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/09 10:47:08 by ecakiray          #+#    #+#             */
-/*   Updated: 2026/05/14 01:34:00 by ecakiray         ###   ########.fr       */
+/*   Updated: 2026/05/15 13:53:59 by ecakiray         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,24 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size)
 	return (dst_size + src_size);
 }
 
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*sjoin;
+	size_t	sjoin_len;
+
+	if (!s1 || !s2)
+		return (0);
+	sjoin_len = ft_strlen(s1);
+	sjoin_len += ft_strlen(s2) + 1;
+	sjoin = malloc (sjoin_len);
+	if (!sjoin)
+		return (0);
+	ft_bzero(sjoin, sjoin_len);
+	ft_strlcat(sjoin, s1, sjoin_len);
+	ft_strlcat(sjoin, s2, sjoin_len);
+	return (sjoin);
+}
+
 char	*ft_strdup(const char *s)
 {
 	int		str_len;
@@ -153,5 +171,5 @@ char	*until_nl(char *s, size_t *len)
 			return (ft_substr(s, 0, *len));
 		tmp++;
 	}
-	return (0);
+	return (NULL);
 }
