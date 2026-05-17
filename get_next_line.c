@@ -1,73 +1,93 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ecakiray <ecakiray@student.42heilbronn.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/05/09 10:47:12 by ecakiray          #+#    #+#             */
+/*   Updated: 2026/05/17 14:17:16 by ecakiray         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 #include <stdlib.h>
 #include <fcntl.h>
 #include <stdio.h>
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
 
-	i = 0;
-	while (s[i])
-		i ++;
-	return (i);
+
+static void	init_line(t_gl *s_line)
+{
+	s_line->line = NULL;
+	s_line->tmp = NULL;
+	s_line->buffer = NULL;
+	s_line->nl_found = 0;
 }
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+static char	*free_null(t_gl *s_line)
 {
-	size_t	src_len;
-	size_t	i;
-
-	src_len = 0;
-	while (*(src + src_len))
-		src_len++;
-	if (size == 0)
-		return (src_len);
-	i = 0;
-	while (*(src + i) && (i < (size - 1)))
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (src_len);
+	free(s_line->line);
+	free(s_line->tmp);
+	free(s_line->buffer);
+	return (NULL);
 }
 
-static char	*till_nl(const char *s, char **rem)
+static int	buffer_has_line(t_gl *s_line, char *remain)
 {
-	size_t	i;
-	char	*res;
+	ft_strlcpy(remain, s_line->tmp, ft_strlen(s_line->tmp) + 1);
+	free(s_line->tmp);
+	s_line->tmp = NULL;
+	s_line->line = join_line(s_line->line, s_line->buffer);
+	free(s_line->buffer);
+	s_line->buffer = NULL;
+	if (!s_line->line)
+		return (0);
+	s_line->nl_found = 1;
+	return (1);
+}
 
-	i = 0;
-	while (s[i] && s[i] != '\n')
-		i++;
-	if (s[i] == '\n')
-		i++;
-	else
-		i = 0;
-	res = malloc(i + 1);
-	if (!res)
-		return (NULL);
-	*rem = malloc(ft_strlen(s + i) + 1);
-	if (!*rem)
+static int	buffer_no_line(t_gl *s_line)
+{
+	free(s_line->buffer);
+	s_line->buffer = NULL;
+	s_line->line = join_line(s_line->line, s_line->tmp);
+	free(s_line->tmp);
+	s_line->tmp = NULL;
+	if (!s_line->line)
+		return (0);
+	return (1);
+}
+static int	read_part(int fd, t_gl *s_line, char *remain)
+{
+	s_line->b_read = read(fd, remain, BUFFER_SIZE);
+	if (s_line->b_read == 0)
 	{
-		free(res);
-		return (NULL);
+		remain[0] = '\0';
+		s_line->nl_found = 1;
+		return (1);
 	}
-	ft_strlcpy(res, s, i + 1);
-	ft_strlcpy(*rem, s + i, ft_strlen(s + i) + 1);
-	return (res);
+	if (s_line->b_read < 0)
+	{
+		remain[0] = '\0';
+		return (0);
+	}
+	remain[s_line->b_read] = '\0';
+	s_line->buffer = till_nl(remain, &s_line->tmp);
+	remain[0] = '\0';
+	if (!s_line->buffer || !s_line->tmp)
+		return (0);
+	if (*s_line->buffer)
+		return (buffer_has_line(s_line, remain));
+	return (buffer_no_line(s_line));
 }
 
 char	*get_next_line(int fd)
 {
-	t_gl	s_line;
+	t_gl		s_line;
 	static char	remain[BUFFER_SIZE + 1];
 
-	s_line.line = NULL;
-	s_line.tmp = NULL;
-	s_line.buffer = NULL;
-	s_line.nl_found = 0;
+	init_line(&s_line);
 	if (*remain)
 	{
 		//printf("remainde line aranıyor\n");

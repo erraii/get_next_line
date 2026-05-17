@@ -6,7 +6,7 @@
 /*   By: ecakiray <ecakiray@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/09 10:47:19 by ecakiray          #+#    #+#             */
-/*   Updated: 2026/05/15 16:47:57 by ecakiray         ###   ########.fr       */
+/*   Updated: 2026/05/17 14:17:43 by ecakiray         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@
 # include <unistd.h>
 
 char	*get_next_line(int fd);
+size_t	ft_strlen(const char *s);
+size_t	ft_strlcpy(char *dst, const char *src, size_t size);
+char	*join_line(char *line, char *add);
+char	*till_nl(const char *s, char **rem);
+int		use_remain(t_gl *s_line, char *remain);
 
 typedef struct s_gl
 {
