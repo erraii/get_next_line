@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ecakiray <ecakiray@student.42heilbronn.    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/09 10:47:12 by ecakiray          #+#    #+#             */
-/*   Updated: 2026/05/15 16:52:08 by ecakiray         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 #include <stdlib.h>
 #include <fcntl.h>
@@ -87,17 +75,22 @@ char	*get_next_line(int fd)
 		if (!s_line.line || !s_line.tmp)
 		{
 			free(s_line.line);
+			s_line.line = NULL;
 			free(s_line.tmp);
+			s_line.tmp = NULL;
 			return (NULL);
 		}
 		if (*s_line.line)
 		{
 			ft_strlcpy(remain, s_line.tmp, ft_strlen(s_line.tmp) + 1);
 			free(s_line.tmp);
+			s_line.tmp = NULL;
 			return(s_line.line);
 		}
 		free(s_line.line);
+		s_line.line = NULL;
 		free(s_line.tmp);
+		s_line.tmp = NULL;
 		s_line.line = malloc(ft_strlen(remain) + 1);
 		if (!s_line.line)
 			return (NULL);
@@ -122,7 +115,9 @@ char	*get_next_line(int fd)
 			if (!s_line.buffer || !s_line.tmp)
 			{
 				free(s_line.buffer);
+				s_line.buffer = NULL;
 				free(s_line.tmp);
+				s_line.tmp = NULL;
 				return (NULL);
 			}
 			if (*s_line.buffer)
@@ -132,6 +127,7 @@ char	*get_next_line(int fd)
 				//printf("remain: %s\n", s_line.tmp);
 				ft_strlcpy(remain, s_line.tmp, ft_strlen(s_line.tmp) + 1);
 				free(s_line.tmp);
+				s_line.tmp = NULL;
 				if (s_line.line)
 				{
 					s_line.tmp = malloc(ft_strlen(s_line.line) + 1);
@@ -139,13 +135,16 @@ char	*get_next_line(int fd)
 						return(NULL);
 					ft_strlcpy(s_line.tmp, s_line.line, ft_strlen(s_line.line) + 1);
 					free(s_line.line);
+					s_line.line = NULL;
 					s_line.line = malloc(ft_strlen(s_line.tmp) + ft_strlen(s_line.buffer) + 1);
 					if(!s_line.line)
 						return(NULL);
 					ft_strlcpy(s_line.line, s_line.tmp, ft_strlen(s_line.tmp) + 1);
 					free(s_line.tmp);
+					s_line.tmp = NULL;
 					ft_strlcpy(s_line.line + ft_strlen(s_line.line), s_line.buffer, ft_strlen(s_line.buffer) + 1);
 					free(s_line.buffer);
+					s_line.buffer = NULL;
 				}
 				else
 				{
@@ -155,6 +154,7 @@ char	*get_next_line(int fd)
 						return(NULL);
 					ft_strlcpy(s_line.line, s_line.buffer, ft_strlen(s_line.buffer) + 1);
 					free(s_line.buffer);
+					s_line.buffer = NULL;
 				}
 				s_line.nl_found = 1;
 			}
@@ -162,39 +162,39 @@ char	*get_next_line(int fd)
 			{
 				//printf("döngü: remainde line yok\n");
 				free(s_line.buffer);
+				s_line.buffer = NULL;
 				if (s_line.line)
 				{
 					s_line.buffer = malloc(ft_strlen(s_line.line) + 1);
 					ft_strlcpy(s_line.buffer, s_line.line, ft_strlen(s_line.line) + 1);
 					free(s_line.line);
+					s_line.line = NULL;
 					s_line.line = malloc(ft_strlen(s_line.buffer) + ft_strlen(s_line.tmp) + 1);
 					ft_strlcpy(s_line.line, s_line.buffer, ft_strlen(s_line.buffer) + 1);
 					free(s_line.buffer);
+					s_line.buffer = NULL;
 					ft_strlcpy(s_line.line + ft_strlen(s_line.line), s_line.tmp, ft_strlen(s_line.tmp) + 1);
 					free(s_line.tmp);
+					s_line.tmp = NULL;
 				}
 				else
 				{
 					s_line.line = malloc(ft_strlen(s_line.tmp) + 1);
 					ft_strlcpy(s_line.line, s_line.tmp, ft_strlen(s_line.tmp) + 1);
 					free(s_line.tmp);
+					s_line.tmp = NULL;
 				}
 			}
 		}
 		else
 		{
-			/*s_line.nl_found = 0;
-			while (s_line.nl_found < BUFFER_SIZE + 1)
-			{
-				remain[s_line.nl_found] = '\0';
-				s_line.nl_found++;
-			}
- 			if (s_line.buffer)
-				free(s_line.buffer);
-			if (s_line.line)
-				free(s_line.line); */
-			if (s_line.tmp)
-				free(s_line.tmp);
+			remain[0] = '\0';
+ 			//if (s_line.buffer)
+			free(s_line.buffer);
+			//if (s_line.line)
+			free(s_line.line);
+			//if (s_line.tmp)
+			free(s_line.tmp);
 			return (NULL);
 		}
 		//free(s_line.buffer);
