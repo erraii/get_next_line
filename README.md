@@ -1,3 +1,38 @@
+*This project has been created as part of the 42 curriculum by ecakiray.*
+
+# get_next_line
+
+## Description
+
+`get_next_line` is a C function that reads and returns one line at a time from a file descriptor.
+
+The goal of this project is to understand how file descriptors, dynamic memory allocation, the `read()` system call, and static variables work together. Each call to `get_next_line(int fd)` returns the next available line from the given file descriptor until the end of the file is reached or an error occurs.
+
+The returned line includes the newline character `\n` when it exists in the file. If the file ends without a final newline, the last line is still returned correctly.
+
+## Prototype
+
+```c
+char *get_next_line(int fd);
+```
+
+## Submitted Files
+
+Mandatory files:
+
+```text
+get_next_line.c
+get_next_line_utils.c
+get_next_line.h
+```
+
+Bonus files:
+
+```text
+get_next_line_bonus.c
+get_next_line_utils_bonus.c
+get_next_line_bonus.h
+```
 ## Instructions
 
 Compile the mandatory project with:
