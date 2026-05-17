@@ -183,13 +183,13 @@ char	*get_next_line(int fd)
 		}
 		else
 		{
-			s_line.nl_found = 0;
+			/*s_line.nl_found = 0;
 			while (s_line.nl_found < BUFFER_SIZE + 1)
 			{
 				remain[s_line.nl_found] = '\0';
 				s_line.nl_found++;
 			}
-/* 			if (s_line.buffer)
+ 			if (s_line.buffer)
 				free(s_line.buffer);
 			if (s_line.line)
 				free(s_line.line); */
