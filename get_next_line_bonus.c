@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecakiray <ecakiray@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/09 10:47:12 by ecakiray          #+#    #+#             */
-/*   Updated: 2026/05/17 15:56:29 by ecakiray         ###   ########.fr       */
+/*   Updated: 2026/05/17 15:57:46 by ecakiray         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <fcntl.h>
 #include <stdio.h>
 
@@ -76,26 +76,30 @@ static int	read_part(int fd, t_gl *s, char *remain)
 
 char	*get_next_line(int fd)
 {
-	static char	remain[BUFFER_SIZE + 1];
+	static char	remain[OPEN_MAX][BUFFER_SIZE + 1];
 	t_gl		s;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd >= OPEN_MAX || BUFFER_SIZE <= 0)
 		return (NULL);
 	init_line(&s);
-	if (*remain && !use_remain(&s, remain))
+	if (*remain[fd] && !use_remain(&s, remain[fd]))
 		return (free_null(&s));
 	while (!s.nl_found)
 	{
-		if (!read_part(fd, &s, remain))
+		if (!read_part(fd, &s, remain[fd]))
 			return (free_null(&s));
 	}
 	return (s.line);
 }
 
-//  int	main(void)
+// int	main(void)
 // {
-	// int		fd;
-	// char	*line;
+// 	int		fd1;
+// 	int		fd2;
+// 	int		fd3;
+// 	char	*line1;
+// 	char	*line2;
+// 	char	*line3;
 /* 	char	*remain;
 	char	*s; 
 
@@ -105,16 +109,30 @@ char	*get_next_line(int fd)
 	printf("remain: %s", remain);
 	free(line);
 	free(remain); */
-// 	fd = open("giant_line.txt", O_RDONLY);
-// 	if (fd == -1)
+// 	fd1 = open("giant_line.txt", O_RDONLY);
+// 	fd2 = open("test.txt", O_RDONLY);
+// 	fd3 = open("1char.txt", O_RDONLY);
+// 	if (fd1 == -1 || fd2 == -1 || fd3 == -1)
 // 		return (1);
 // 	for (int i = 0; i < 52; i++)
 // 	{
-// 		line = get_next_line(fd);
-// 		if(line)
-// 			printf("line[%d]: %s", i + 1, line);
-// 		free (line);
-// 		line = NULL;
+// 		line1 = get_next_line(fd1);
+// 		if (line1)
+// 			printf("line[%d] of file1: %s", i + 1, line1);
+// 		free (line1);
+// 		line1 = NULL;
+// 		line2 = get_next_line(fd2);
+// 		if (line2)
+// 			printf("line[%d] of file2: %s", i + 1, line2);
+// 		free (line2);
+// 		line2 = NULL;
+// 		line3 = get_next_line(fd3);
+// 		if (line3)
+// 			printf("line[%d] of file3: %s", i + 1, line3);
+// 		free (line3);
+// 		line3 = NULL;
 // 	}
-// 	close(fd);
+// 	close(fd1);
+// 	close(fd2);
+// 	close(fd3);
 // }
