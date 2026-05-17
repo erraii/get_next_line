@@ -183,7 +183,18 @@ char	*get_next_line(int fd)
 		}
 		else
 		{
-			remain[0] = '\0';
+			s_line.nl_found = 0;
+			while (s_line.nl_found < BUFFER_SIZE + 1)
+			{
+				remain[s_line.nl_found] = '\0';
+				s_line.nl_found++;
+			}
+/* 			if (s_line.buffer)
+				free(s_line.buffer);
+			if (s_line.line)
+				free(s_line.line); */
+			if (s_line.tmp)
+				free(s_line.tmp);
 			return (NULL);
 		}
 		//free(s_line.buffer);
@@ -191,10 +202,10 @@ char	*get_next_line(int fd)
 	return(s_line.line);
 }
 
-int	main(void)
+/* int	main(void)
 {
 	int		fd;
-	char	*line;
+	char	*line; */
 /* 	char	*remain;
 	char	*s; */
 
@@ -204,7 +215,7 @@ int	main(void)
 	printf("remain: %s", remain);
 	free(line);
 	free(remain); */
-	fd = open("test.txt", O_RDONLY);
+/* 	fd = open("test.txt", O_RDONLY);
 	if (fd == -1)
 		return (1);
 	for (int i = 0; i < 52; i++)
@@ -216,4 +227,4 @@ int	main(void)
 		line = NULL;
 	}
 	close(fd);
-}
+} */
